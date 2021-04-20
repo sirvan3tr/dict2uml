@@ -15,16 +15,22 @@ import os
 
 def plantuml_exec(*file_names):
     """Run PlantUML"""
-    cmd = ["/usr/local/bin/plantuml",
+    #cmd = ["/usr/local/bin/plantuml",
+    cmd = ["/opt/homebrew/Cellar/plantuml/1.2021.4/bin/plantuml",
            "-tsvg"] + list(file_names)
     subprocess.check_call(cmd, shell=False, stderr=subprocess.STDOUT)
     return [os.path.splitext(f)[0] + ".svg" for f in file_names]
 
-def dict2svg(d):
+def dict2svg(d, uml=False):
+    # 1. Save the UML diagram to file
     base_name = str(uuid.uuid4())
     uml_path = base_name + ".uml"
     with open(uml_path, 'w') as fp:
-        fp.write(dict2plantuml(d))
+        if uml:
+            fp.write(d)
+        else:
+            fp.write(dict2plantuml(d))
+    # 2. Convert UML file to SVG
     try:
         output = plantuml_exec(uml_path)
         svg_name = output[0]
@@ -32,10 +38,18 @@ def dict2svg(d):
     finally:
         if os.path.exists(uml_path):
             os.unlink(uml_path)
-
         svg_path = base_name + ".svg"
         if os.path.exists(svg_path):
             os.unlink(svg_path)
+
+def uml2svg(uml:str):
+    """Takes a UML string and converts it into an SVG using plantuml
+    Args:
+        uml: string that is a properly formatted UML syntax.
+    """
+    return dict2svg(uml, True)
+
+
 
 
 def traverse(obj, parent):
@@ -139,7 +153,5 @@ if __name__ == "__main__":
     message = ""
     for line in fileinput.input():
         message += line
-
     d = json.loads(message)
-
     print(dict2plantuml(d))
