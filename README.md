@@ -6,6 +6,11 @@ Python library that prints a Python `dict` as [PlantUML](http://plantuml.com/) c
 
 Heavily inspired by [json-to-plantuml](https://github.com/meteorbites/json-to-plantuml) by [meteorbites](https://github.com/meteorbites) and [IPlantUML](https://github.com/jbn/IPlantUML) by [John B Nelson](https://github.com/jbn).
 
+## Fork TODO
+* This is a poor implementation and creates ugly UML diagrams. The
+    json-to-plantuml does a better job. So, you can install that and call system
+    process from python to run and return the diagram or uml text.
+
 ## Installation
 
 Install `plantuml`, for example with `brew install plantuml`. The location should be `/usr/local/bin/plantuml`. This is hardcoded for now, so if you need to change it, please install from source.
